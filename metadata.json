@@ -1,0 +1,5 @@
+{
+  "name": "CM Spin Master Rewards",
+  "description": "A high-fidelity mobile application mimic for Coin Master spin and coin rewards with claimed state tracking and smooth animations.",
+  "requestFramePermissions": []
+}
