@@ -1,84 +1,44 @@
 
 import React from 'react';
-import { Share2, CheckCircle2 } from 'lucide-react';
+import { Share2, ArrowRight, Gift } from 'lucide-react';
 import { RewardItem, RewardType } from '../types';
+import { COLORS } from '../constants';
 
 interface RewardCardProps {
-  reward: RewardItem;
+  item: RewardItem;
   isClaimed: boolean;
-  onClaim: (id: string, link: string) => void;
+  onClaim: (item: RewardItem) => void;
+  onShare: (item: RewardItem) => void;
 }
 
-const RewardCard: React.FC<RewardCardProps> = ({ reward, isClaimed, onClaim }) => {
-  const getIcon = () => {
-    switch (reward.type) {
-      case RewardType.SPIN:
-        return (
-          <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center border border-blue-100">
-            <span className="text-2xl">🌀</span>
-          </div>
-        );
-      case RewardType.COIN:
-        return (
-          <div className="w-14 h-14 bg-yellow-50 rounded-2xl flex items-center justify-center border border-yellow-100">
-            <span className="text-2xl">💰</span>
-          </div>
-        );
-      case RewardType.BOTH:
-        return (
-          <div className="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center border border-purple-100">
-            <span className="text-2xl">🎁</span>
-          </div>
-        );
-    }
-  };
-
-  const handleShare = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (navigator.share) {
-      navigator.share({
-        title: reward.title,
-        text: `Nhận ${reward.title} ngay tại đây!`,
-        url: window.location.href,
-      }).catch(() => {});
-    }
-  };
-
+const RewardCard: React.FC<RewardCardProps> = ({ item, isClaimed, onClaim, onShare }) => {
   return (
-    <div 
-      className={`bg-white rounded-[24px] p-5 mb-4 shadow-[0_4px_12px_rgba(0,0,0,0.03)] border transition-all duration-300 ${
-        isClaimed ? 'opacity-60 grayscale-[0.3] border-gray-100' : 'border-transparent hover:shadow-md'
-      }`}
-    >
-      <div className="flex items-center space-x-4">
-        {getIcon()}
-        <div className="flex-1">
-          <h3 className={`font-bold text-[17px] leading-tight ${isClaimed ? 'text-gray-500' : 'text-gray-900'}`}>
-            {reward.title}
-          </h3>
-          <p className="text-gray-400 text-xs mt-1 font-medium">{reward.date}</p>
-        </div>
-        {isClaimed && (
-          <div className="text-green-500 animate-in fade-in zoom-in duration-300">
-            <CheckCircle2 size={24} />
-          </div>
-        )}
+    <div className="bg-[#E3F2FD] rounded-xl mb-3 flex items-center overflow-hidden shadow-sm border border-blue-100">
+      <div className="p-4 flex items-center justify-center">
+         <div className="w-10 h-10 flex items-center justify-center text-purple-700">
+            <Gift size={32} />
+         </div>
+      </div>
+      
+      <div className="flex-1 py-3 px-2">
+        <h3 className="font-bold text-[#1A237E] text-base leading-tight">
+          {item.title}
+        </h3>
+        <p className="text-gray-400 text-xs font-medium mt-0.5">{item.date}</p>
       </div>
 
-      <div className="flex space-x-3 mt-5">
+      <div className="flex flex-col border-l border-blue-200">
         <button
-          onClick={() => onClaim(reward.id, reward.link)}
-          className={`flex-1 h-12 rounded-xl font-bold text-sm transition-all active:scale-95 flex items-center justify-center ${
-            isClaimed 
-              ? 'bg-gray-100 text-gray-500' 
-              : 'bg-blue-600 text-white shadow-lg shadow-blue-200'
-          }`}
+          onClick={() => onClaim(item)}
+          className="p-3 bg-white hover:bg-gray-50 text-blue-600 transition-colors"
+          title="Nhận thưởng"
         >
-          {isClaimed ? 'Đã nhận' : 'Nhận ngay'}
+          <ArrowRight size={20} strokeWidth={3} />
         </button>
         <button
-          onClick={handleShare}
-          className="w-14 h-12 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center text-gray-500 active:scale-95 transition-all"
+          onClick={() => onShare(item)}
+          className="p-3 bg-white border-t border-blue-100 hover:bg-gray-50 text-blue-600 transition-colors"
+          title="Chia sẻ"
         >
           <Share2 size={20} />
         </button>

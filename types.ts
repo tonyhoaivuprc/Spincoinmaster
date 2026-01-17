@@ -1,19 +1,18 @@
 
 export enum RewardType {
-  SPIN = 'SPIN',
-  COIN = 'COIN',
-  BOTH = 'BOTH'
+  SPIN = 'spin',
+  COIN = 'coin'
 }
 
 export interface RewardItem {
   id: string;
   title: string;
   date: string;
-  type: RewardType;
   link: string;
-  amount: string;
+  type: RewardType;
+  amount?: string;
 }
 
-export interface ClaimState {
-  [id: string]: boolean;
+export interface ClaimedStatus {
+  [key: string]: boolean;
 }

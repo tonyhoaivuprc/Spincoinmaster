@@ -1,5 +1,6 @@
+
 {
-  "name": "CM Spin Master Rewards",
-  "description": "A high-fidelity mobile application mimic for Coin Master spin and coin rewards with claimed state tracking and smooth animations.",
+  "name": "Spins Link Coinmaster",
+  "description": "Ứng dụng nhận Spin và Coin miễn phí hàng ngày cho game Coin Master.",
   "requestFramePermissions": []
 }

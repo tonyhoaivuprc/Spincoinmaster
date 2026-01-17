@@ -1,31 +1,47 @@
 
-import { RewardItem, ClaimState } from '../types';
-import { MOCK_REWARDS } from '../constants';
+import { RewardItem, ClaimedStatus } from '../types';
+import { generateMockData } from '../constants';
 
-const STORAGE_KEY = 'cm_claimed_rewards';
+const CLAIMED_STORAGE_KEY = 'spin_vu_claimed_links';
 
 export const rewardService = {
-  async getRewards(): Promise<RewardItem[]> {
-    // Simulate API delay
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(MOCK_REWARDS);
-      }, 1000);
-    });
+  async fetchRewards(): Promise<RewardItem[]> {
+    try {
+      // In a real app, this would be: 
+      // const response = await fetch('https://api.example.com/cm-rewards');
+      // return await response.json();
+      
+      // Simulating network delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      return generateMockData();
+    } catch (error) {
+      console.error('Error fetching rewards:', error);
+      return generateMockData();
+    }
   },
 
-  getClaimedState(): ClaimState {
-    const stored = localStorage.getItem(STORAGE_KEY);
+  getClaimedStatus(): ClaimedStatus {
+    const stored = localStorage.getItem(CLAIMED_STORAGE_KEY);
     return stored ? JSON.parse(stored) : {};
   },
 
-  setClaimedState(id: string) {
-    const currentState = this.getClaimedState();
-    const newState = { ...currentState, [id]: true };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+  markAsClaimed(id: string): void {
+    const current = this.getClaimedStatus();
+    current[id] = true;
+    localStorage.setItem(CLAIMED_STORAGE_KEY, JSON.stringify(current));
   },
-  
-  clearClaimedState() {
-    localStorage.removeItem(STORAGE_KEY);
+
+  shareLink(item: RewardItem): void {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Nhận thưởng Coin Master',
+        text: `Nhận ngay: ${item.title} tại Spin Vũ!`,
+        url: item.link,
+      }).catch(err => console.error('Error sharing', err));
+    } else {
+      // Fallback: Copy to clipboard
+      navigator.clipboard.writeText(item.link);
+      alert('Đã sao chép link vào bộ nhớ tạm!');
+    }
   }
 };
